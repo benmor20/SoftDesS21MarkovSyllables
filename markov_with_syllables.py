@@ -1,4 +1,29 @@
 import syllablizer
+import random
+import wikipedia
+
+def build_word_list(source_text):
+    words = source_text.replace("\n", " ").split()
+    letters = "qwertyuiopasdfghjklzxcvbnm" # can't use isalpha because that includes accents, which syllablizer cannot deal with
+    word_list = []
+    for word in words:
+        alpha = True
+        has_lower = False
+        for char in word[1:-1]: # check that all except first and last are letters - first for (, {, [, last for punc and closing
+            if char.lower() not in letters:
+                alpha = False
+                break
+            if char == char.lower():
+                has_lower = True
+        if not alpha or not has_lower:
+            continue
+        if len(word) == 2 and word[0] not in letters and word[1] not in letters:
+            continue
+        if len(word) == 1 and word not in letters:
+            continue
+        word_list.append(word)
+    return word_list
+
 
 def build_syllable_list(source_text):
     """
@@ -6,16 +31,10 @@ def build_syllable_list(source_text):
     If the separated "words" contain punctuation, the punctuation will be
     preserved, but spaces and other whitespace are removed.
     """
-
-    words = source_text.split()
-    words = [word for word in words if syllablizer.preprocess(word).isalpha()]
-
-    syllables = []
-
-    return [syllablizer.syllablize(word) for word in words]
+    return [syllablizer.syllablize(word) for word in build_word_list(source_text)]
 
 
-def build_next_words(word_list):
+def build_next_syllables(source_text):
     """
     Creates a dictionary that, for every unique "word" (aka unique combination
     of characters) in a list of words, stores the "next word" in the list. If
@@ -32,28 +51,23 @@ def build_next_words(word_list):
     follows it in word_list. The entry for with end punctuation will be "".
 
     """
-    sentence_end_punctuation = ['?', '!', '.']
-    output_dictionary = {}
-    
+    syll_list = build_syllable_list(source_text)
+    output_dictionary = {"": []}
 
-    for index, word in enumerate(word_list):
-        if word[-1] in sentence_end_punctuation:
-            output_dictionary[word] = [""]
-        elif word not in output_dictionary:
-            if index + 1 < len(word_list):
-                output_dictionary[word] = [word_list[index + 1]]
-        else:
-            if index + 1 < len(word_list):
-                output_dictionary[word].append(word_list[index + 1])
-        if index == 0:
-            output_dictionary[""] = [word]
-        elif word_list[index - 1][-1] in sentence_end_punctuation:
-            output_dictionary[""].append(word_list[index])
+    for word in syll_list:
+        if len(word) == 1:
+            continue
+        output_dictionary[""].append(word[0])
+        sylls = word + [""]
+        for syll_index, syll in enumerate(sylls[:-1]):
+            next_sylls = output_dictionary.setdefault(syll, [])
+            next_sylls.append(sylls[syll_index + 1])
+            #output_dictionary[syll] = next_sylls
     return output_dictionary
 
 
 
-def generate_sentence(next_words):
+def generate_word(next_sylls):
     """
     Generates a random sentence by selecting a single sentence-starting
     word and several words from the dictionary next_words, then ends with
@@ -68,38 +82,13 @@ def generate_sentence(next_words):
     that appear after the previous word in an original text.
 
     """
-    sentence = ""
     word = ""
-    word = random.choice(next_words[''])
-    # while next_words[key] != ['']:
-    while "" not in next_words[word]:
-        next_word = random.choice(next_words[word])
-        sentence = sentence + word + " "
-        word = next_word
-    sentence = sentence + word
-    return sentence
+    syll = random.choice(next_sylls[""])
+    while len(syll) > 0:
+        word += syll
+        syll = random.choice(next_sylls[syll])
+    return word
 
 
-def generate_text(next_words, num_sentences):
-    """
-    Generates multiple sentences by running the generate_sentence function
-    multiple times and concatenating the results.
-
-    Args: next_words, a dictionary that contains words that come next in
-    a starter text, and words that start sentences stored under the entry
-    for "".
-    num_sentences, a positive integer that tells the function how many
-    sentences to generate.
-
-    Returns: A string with the specified number of sentences.
-
-    """
-
-    paragraph = ""
-    for _ in range(num_sentences):
-        paragraph = paragraph + generate_sentence(next_words) + " "
-    return paragraph[:-1]
-
-with open("jabberwocky.txt", "r") as file:
-    source = file.read().replace("\n"," ")
-print(build_syllable_list(source))
+content = wikipedia.page("United States of America").content
+print(generate_word(build_next_syllables(content)))
