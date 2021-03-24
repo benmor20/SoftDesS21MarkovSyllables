@@ -13,21 +13,26 @@ def syllablize(word):
     consonant_pairs = ("sh", "ph", "th", "ch", "wh", "tc", "ck") # tc is for tch
     vowels = "aeiouy"
     letters = "qwertyuiopasdfghjklzxcvbnm"
-    length = len(word)
+    length = len(clean_word)
     for index in range(1,length):
-        char = word[index]
+        char = clean_word[index]
         if char not in letters:
             raise ValueError("Cannot have characters other than letters in " + \
                 "provided word (word: " + clean_word + ")")
         if char in vowels:
             continue
-        if index < length - 1 and word[index:index+2] in consonant_pairs:
+        if index < length - 1 and clean_word[index:index+2] in consonant_pairs:
             continue
-        syllables = [word[:index+1]] + syllablize(word[index+1:])
+        syllables = [clean_word[:index+1]] + syllablize(clean_word[index+1:])
         if len(syllables[-1]) == 0:
             return syllables[:-1]
         return syllables
-    return [word]
+    return [clean_word]
+
+
+
+!!!!!!DON"T FORGET TO SPLIT BY END OF END OF LIST!!!!
+
 
 
 def preprocess(word):
