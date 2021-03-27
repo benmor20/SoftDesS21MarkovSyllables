@@ -5,6 +5,7 @@ import wikipedia
 def build_word_list(source_text):
     words = source_text.replace("\n", " ").split()
     letters = "qwertyuiopasdfghjklzxcvbnm" # can't use isalpha because that includes accents, which syllablizer cannot deal with
+    digits = "1234567890"
     word_list = []
     for word in words:
         alpha = True
@@ -15,13 +16,17 @@ def build_word_list(source_text):
                 break
             if char == char.lower():
                 has_lower = True
+        if word[0] in digits or word[-1] in digits:
+            continue
         if not alpha or not has_lower:
             continue
         if len(word) == 2 and word[0] not in letters and word[1] not in letters:
             continue
         if len(word) == 1 and word not in letters:
             continue
-        word_list.append(word)
+        clean = syllablizer.preprocess(word)
+        if len(clean) > 0:
+            word_list.append(clean)
     return word_list
 
 
@@ -88,7 +93,3 @@ def generate_word(next_sylls):
         word += syll
         syll = random.choice(next_sylls[syll])
     return word
-
-
-content = wikipedia.page("United States of America").content
-print(generate_word(build_next_syllables(content)))

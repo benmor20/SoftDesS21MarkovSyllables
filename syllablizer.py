@@ -8,30 +8,28 @@ def syllablize(word):
     Returns:
         a list of strings, where wach string is one syllable, in order.
     """
-
-    clean_word = preprocess(word)
-    consonant_pairs = ("sh", "ph", "th", "ch", "wh", "tc", "ck", "nd") # tc is for tch
+    consonant_pairs = ("sh", "ph", "th", "ch", "wh", "tc", "ck", "nd", "gh") # tc is for tch
     vowels = "aeiouy"
     letters = "qwertyuiopasdfghjklzxcvbnm"
-    length = len(clean_word)
+    length = len(word)
     for index in range(1,length):
-        char = clean_word[index]
+        char = word[index]
         if char not in letters:
             raise ValueError("Cannot have characters other than letters in " + \
-                "provided word (word: " + clean_word + ")")
-        if index == 1 and clean_word[0:2] in consonant_pairs:
+                "provided word (word: " + word + ")")
+        if index == 1 and word[0:2] in consonant_pairs:
             continue
         if char in vowels:
             continue
-        if index < length - 1 and clean_word[index:index+2] in consonant_pairs:
+        if index < length - 1 and word[index:index+2] in consonant_pairs:
             continue
-        if clean_word[index+1:] == "e": # silent e case
+        if word[index+1:] == "e" or (index + 2 == length and word[index+1:] not in vowels): # silent e and consontant pairs like at the end of should
             return [word]
-        syllables = [clean_word[:index+1]] + syllablize(clean_word[index+1:])
+        syllables = [word[:index+1]] + syllablize(word[index+1:])
         if len(syllables[-1]) == 0:
             return syllables[:-1]
         return syllables
-    return [clean_word]
+    return [word]
 
 
 def preprocess(word):
@@ -46,8 +44,10 @@ def preprocess(word):
     Returns:
         A string representing the cleaned version of the word
     """
-    remove = ".,/\\?!-'\"()\{\}[]:;"
-    cleaned = word.lower()
-    for punc in remove:
-        cleaned = cleaned.replace(punc, "")
+    letters = "qwertyuiopasdfghjklzxcvbnm"
+    smol = word.lower()
+    cleaned = ""
+    for letter in smol:
+        if letter in letters:
+            cleaned += letter
     return cleaned
