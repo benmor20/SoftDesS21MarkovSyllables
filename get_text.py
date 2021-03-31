@@ -28,13 +28,13 @@ def web_scrape(url):
 
 def get_texts(book):
     """
-    Gets the text from a dictionary of corp
+    Gets the text from a dictionary of corpus.
     
     Args:
         book: a string representing a URL pointing to a UTF-8 text file or
         a book name in the included dictionary, or "all".
         
-    Returns: a dictionary containing the text name 
+    Returns: a dictionary containing the text's name as a key
     """
     all_texts = {}
     if book in books:
