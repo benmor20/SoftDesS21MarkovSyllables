@@ -13,7 +13,7 @@ for book in books:
 
 ranj = api.list("idbn:HARVARD:HNL9UV")"""
 
-from urllib import request
+"""from urllib import request
 import markov_with_syllables as markov
 import syllablizer
 
@@ -36,7 +36,7 @@ novel_words = set()
 words = set()
 while num_words < MAX_WORDS:
     word = markov.generate_word(sylls)
-    if len(syllablizer.syllablize(word)) > 1:
+    if len(syllablizer.syllablize(word)) > min_syllables:
         words.add(word)
         if word not in all_words:
             novel_words.add(word)
@@ -46,3 +46,10 @@ print(f"Of the unique words, {len(novel_words)} are new and {len(words) - len(no
 print("10 novel words:")
 for _ in range(10):
     print(novel_words.pop())
+"""
+
+from get_text import get_texts
+from analysis import analyze_markov_syllables as analyze
+
+results = analyze(get_texts("Romeo and Juliet"), True, min_syllables=2)
+print(results)
