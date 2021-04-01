@@ -18,12 +18,25 @@ tfs = tfidf.fit_transform(texts.values())
 feature_names = tfidf.get_feature_names()
 
 def nonzero_tokens(book):
-    response = tfidf.transform([texts[book]])
-    tokens = {}
-    for index in response.nonzero()[1]:
-        tokens[feature_names[index]] = response[0, index]
-    return tokens
+    books = book
+    is_list = type(book) is list
+    if not is_list:
+        books = [book]
+    all_tokens = {}
+    for book in books:
+        response = tfidf.transform([texts[book]])
+        tokens = {}
+        for index in response.nonzero()[1]:
+            tokens[feature_names[index]] = response[0, index]
+        all_tokens[book] = tokens
+    return all_tokens if is_list else all_tokens[book]
 
 
-for book in books:
-    print(f"{book}: {len(nonzero_tokens(book))}")
+def num_nonzero_tokens(book):
+    tokens = nonzero_tokens(book)
+    if type(book) is list:
+        num_tokens = []
+        for index,title in enumerate(book):
+            num_tokens.append(len(tokens[title]))
+        return num_tokens
+    return len(tokens)

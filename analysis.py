@@ -52,7 +52,7 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
     text_info = []
     for index, text in enumerate(texts):
         if verbose:
-            print(f"Text {index+1}: {#text name}]")
+            print(f"Text {index+1}")
         print(type(text))
 
         sylls = markov.build_next_syllables(text)

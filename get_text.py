@@ -4,12 +4,12 @@ import syllablizer
 import validators
 
 books = {
-    "Romeo and Juliet": "http://www.gutenberg.org/ebooks/1777.txt.utf-8",
-    "Finnegan's Wake": "https://archive.org/stream/finneganswake00joycuoft/finneganswake00joycuoft_djvu.txt",
-    "Great Gatsby": "http://www.gutenberg.org/files/64317/64317-0.txt",
-    "Canterbury Tales": "http://www.gutenberg.org/cache/epub/2383/pg2383.txt",
     "Iliad": "http://www.gutenberg.org/files/6150/6150-0.txt",
-    "Monty Python": "https://raw.githubusercontent.com/teropa/nlp/master/resources/corpora/webtext/grail.txt"
+    "Canterbury Tales": "http://www.gutenberg.org/cache/epub/2383/pg2383.txt",
+    "Romeo and Juliet": "http://www.gutenberg.org/ebooks/1777.txt.utf-8",
+    "Great Gatsby": "http://www.gutenberg.org/files/64317/64317-0.txt",
+    "Monty Python": "https://raw.githubusercontent.com/teropa/nlp/master/resources/corpora/webtext/grail.txt",
+    "Finnegan's Wake": "https://archive.org/stream/finneganswake00joycuoft/finneganswake00joycuoft_djvu.txt",
     }
 
 def web_scrape(url):
