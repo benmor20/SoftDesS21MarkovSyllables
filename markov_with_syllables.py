@@ -60,8 +60,8 @@ def build_next_syllables(source_text):
     output_dictionary = {"": []}
 
     for word in syll_list:
-        if len(word) == 1:
-            continue
+    #    if len(word) == 1:
+    #        continue
         output_dictionary[""].append(word[0])
         sylls = word + [""]
         for syll_index, syll in enumerate(sylls[:-1]):

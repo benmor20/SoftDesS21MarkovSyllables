@@ -52,7 +52,7 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
     text_info = []
     for index, text in enumerate(texts):
         if verbose:
-            print(f"Text {index+1}")
+            print(f"Text {index+1}: {#text name}]")
         print(type(text))
 
         sylls = markov.build_next_syllables(text)
@@ -115,8 +115,8 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
         average_unique_markov_word_length = float(sum(temp)/len(temp))
 
         if verbose==True:
-            print(f"Generated {num_words} words, {unique_count} of which were unique.")
-            print(f"Of the unique words, {len(novel_words)} are new and {len(words) - len(novel_words)} are from the text")
+            print(f"Generated {num_words} words, {len(words)} of which were not repeats.")
+            print(f"Of the unique words, {unique_count} are new and {regenerated_count} are from the text")
             print(f"Of the new words, {english_count} are actual words")
 
         text_info.append({
