@@ -12,20 +12,25 @@ def syllablize(word):
     vowels = "aeiouy"
     letters = "qwertyuiopasdfghjklzxcvbnm"
     length = len(word)
-    for index in range(1,length):
+    for index in range(length):
         char = word[index]
         if char not in letters:
             raise ValueError("Cannot have characters other than letters in " + \
                 "provided word (word: " + word + ")")
+        if index == 0 and char not in vowels:
+            continue
         if index == 1 and word[0:2] in consonant_pairs:
             continue
         if char in vowels:
             continue
         if index < length - 1 and word[index:index+2] in consonant_pairs:
             continue
-        if word[index+1:] == "e" or (index + 2 == length and word[index+1:] not in vowels): # silent e and consontant pairs like at the end of should
+        if word[index+1:] == "e" or (index >= length - 2 and word[-1] not in vowels): # silent e, only consonants left (like ld in should or m in item)
             return [word]
-        syllables = [word[:index+1]] + syllablize(word[index+1:])
+        if word[index + 1] in vowels:
+            syllables = [word[:index]] + syllablize(word[index:])
+        else:
+            syllables = [word[:index+1]] + syllablize(word[index+1:])
         if len(syllables[-1]) == 0:
             return syllables[:-1]
         return syllables

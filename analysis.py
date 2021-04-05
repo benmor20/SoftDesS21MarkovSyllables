@@ -40,6 +40,8 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
                 generator's results for the corpus.
             average_word_length: The mean length of the words in the original corpus.
                 average_unique_markov_word_length
+            average_unique_markov_word_length: the mean length of the words produced
+                by the Markov generator which do not appear in the source text
         If analyze_text is a list of strings, returns a list of dicts, where
             each dict is as described above for each input text
     """
@@ -123,8 +125,8 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
             "unique_count":unique_count,
             "regenerated_count":regenerated_count,
             "english_count":english_count,
-            "most_common_syllables":most_common_syllables,
-            "most_common_novel_markov_words": most_common_novel_markov_words,
+            "most_common_syllables":dict(most_common_syllables),
+            "most_common_novel_markov_words": dict(most_common_novel_markov_words),
             "average_word_length": average_word_length,
             "average_unique_markov_word_length": average_unique_markov_word_length
         })
