@@ -9,11 +9,8 @@ from syllablizer import (
     build_next_syllables,
     generate_sentence,
     generate_text,
+    syllablize
 )
-
-test_syllablizer
-
-for word in tests:
 
 WORD_CASES = [
     ("passive",["pas","sive"])
@@ -42,4 +39,8 @@ WORD_CASES = [
     
 ]
 
-assert(syllablize(WORD_CASES[0]) == WORD_CASES[1])
+@pytest.mark.parameterize("word", "syllables", WORD_CASES)
+
+def test_syllablizer():
+
+    assert(syllablize(word) == syllables)

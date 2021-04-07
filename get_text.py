@@ -1,3 +1,5 @@
+"""Contains code to handle the downloading of texts and performing preliminary formatting."""
+
 from urllib import request
 import markov_with_syllables as markov
 import syllablizer
@@ -20,7 +22,8 @@ def web_scrape(url):
         Book: a string representing a URL that points to a utf-8 text.
         file.
     
-    Returns: A string of the entire text of the file.
+    Returns:
+        A string of the entire text of the file.
     """
     response = request.urlopen(url)
     text = response.read().decode("utf8")
@@ -34,7 +37,8 @@ def get_texts(book):
         book: a string representing a URL pointing to a UTF-8 text file or
         a book name in the included dictionary, or "all".
         
-    Returns: a dictionary containing the text's name as a key
+    Returns:
+        A dictionary containing the text's name as a key
     """
     all_texts = {}
     if book in books:
@@ -61,7 +65,8 @@ def add_text(url, initial_dictionary={}, text_name="use_url"):
         text_name: (optional) if given, this string specifies the dictionary
             key that the text is stored under.
 
-    Returns: The input dictionary with the text from the URL included at the
+    Returns:
+        The input dictionary with the text from the URL included at the
     end of that dictionary, under the key specified by text_name, or the given
     URL if text_name was not given.
     """
