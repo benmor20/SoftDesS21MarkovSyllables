@@ -3,6 +3,19 @@ import random
 import wikipedia
 
 def build_word_list(source_text):
+    """
+    Compiles source text into a list of words, preprocessing them. Will also
+    remove anything it deems to not be words. These include tokens with digits,
+    and tokens without any lowercase letters (aka abbreviations or tokens that
+    are just symbols)
+
+    Args:
+        source_text: a string, the text to split into a word list
+
+    Returns:
+        A list of strings, where each string is a word in the source text that
+            comply to the rules above. Each word is also preprocessed.
+    """
     words = source_text.replace("\n", " ").split()
     letters = "qwertyuiopasdfghjklzxcvbnm" # can't use isalpha because that includes accents, which syllablizer cannot deal with
     digits = "1234567890"
@@ -32,29 +45,33 @@ def build_word_list(source_text):
 
 def build_syllable_list(source_text):
     """
-    Split an input into a list of the source's "words" based on whitespace.
-    If the separated "words" contain punctuation, the punctuation will be
-    preserved, but spaces and other whitespace are removed.
+    Split a source text into syllables.
+
+    Args:
+        source_text: a string, the corpus to split into syllables.
+
+    Returns:
+        A list of lists of strings, where each sublist is a single word, and
+            each string in the sublist is a single syllable.
     """
     return [syllablizer.syllablize(word) for word in build_word_list(source_text)]
 
 
 def build_next_syllables(source_text):
     """
-    Creates a dictionary that, for every unique "word" (aka unique combination
-    of characters) in a list of words, stores the "next word" in the list. If
-    that "word" has a sentence-ending punctuation on it, then "" is added as
-    the "next word" for that word's entry, and the next word will be stored in
-    an entry for "".
+    Builds the dictionary of next syllables given a source text.
 
-    Args: word_list, a list of words that can include punctuation.
-    word_list should not include whitespace.
+    Specifically, will map every syllable to each syllable that follows it,
+    preserving frequency. Any syllable at the end of a word will include a
+    mapping to an empty string. The first element of the resulting dict will
+    map an empty string to a list of all syllables that start the word.
 
-    Returns: a dictionary with an entry for "" and an entry for each word in
-    word_list. The entry for "" will contain each word that follows an end
-    punctuation, while the entry for each word will contain the word that
-    follows it in word_list. The entry for with end punctuation will be "".
-
+    Args:
+        source_text: a string, the corpus ot build the syllable mapping for.
+    
+    Returns:
+        A dict mapping strings (syllables) to lists of strings (all syllables
+            that follow the key) as per the rules above.
     """
     syll_list = build_syllable_list(source_text)
     output_dictionary = {"": []}
@@ -74,18 +91,21 @@ def build_next_syllables(source_text):
 
 def generate_word(next_sylls):
     """
-    Generates a random sentence by selecting a single sentence-starting
-    word and several words from the dictionary next_words, then ends with
-    a sentence-ending word. This type of generation uses markov chains, so
-    we can call it a markov text generator.
+    Generates a single word given a syllable mapping from build_next_syllables.
 
-    Args: next_words, a dictionary that contains words that come next in
-    a starter text, and words that start sentences stored under the entry
-    for "".
+    Specifically, will choose a random element from the list of syllables for
+    an empty string, and append that to a string. Will then choose a random
+    element from the last syllable chosen and append that to the end of the
+    string, repeating until an empty string is chosen.
 
-    Returns: A string that contains exactly one sentence built with words
-    that appear after the previous word in an original text.
-
+    Args:
+        next_sylls: a dictionary of strings to lists of strings, representing
+            all syllables and the list of all syllables that follow it in a
+            certain corpus.
+    
+    Returns:
+        A string representing a random word generated from running a Markov
+            chain on next_sylls, as per the specification above.
     """
     word = ""
     syll = random.choice(next_sylls[""])

@@ -6,7 +6,7 @@ def syllablize(word):
         word: a string representing a single word to break up
     
     Returns:
-        a list of strings, where wach string is one syllable, in order.
+        a list of strings, where each string is one syllable of the word.
     """
     consonant_pairs = ("sh", "ph", "th", "ch", "wh", "tc", "ck", "nd", "gh") # tc is for tch
     vowels = "aeiouy"
@@ -41,7 +41,7 @@ def preprocess(word):
     """
     Preprocesses a word.
 
-    Specifically, runs lower and remove punctuation
+    Specifically, runs lower and removes any characters besides letters.
 
     Args:
         word: a string to preprocess. Assumed to be a single word.
