@@ -35,9 +35,9 @@ WORD_CASES = [
     ("September",["sep","tem","ber"])
     ("ceremony",["cer","e","mo","ny"])
     ("student",["stu","dent"])
-    ("apple",["ap","ple"])
-    
+    ("apple",["ap","ple"])    
 ]
+
 
 @pytest.mark.parameterize("word", "syllables", WORD_CASES)
 

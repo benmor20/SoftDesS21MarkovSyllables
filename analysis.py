@@ -28,7 +28,7 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
             always accurate, because the splitter works based on basic generalized
             rules like letter groupings and vowel-consonant sequences to identify
             syllables.
-        
+
     Returns: A dictionary with the following items:
             unique_count, a count of words created by the markov generator from the
                 corpus that didn't appear in the original corpus.
@@ -50,7 +50,6 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
     is_list = type(analyze_text) is list
     if not is_list:
         texts = [analyze_text]
-    
     text_info = []
     for index, text in enumerate(texts):
         if verbose:
@@ -79,18 +78,17 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
                 num_words += 1
             if verbose and num_words % 1000 == 0:
                 print(str(num_words))
-        
         if verbose:
             for _ in range(10):
                 print(novel_words.pop())
-        
+
         #Calculate the number of markov-generated words not found in the original.
         unique_count=len(novel_words)
         #Calculate the number of words that the markov generator returned that also
         #appear in the original corpus
         regenerated_count = len(words)-len(novel_words)
         #Calculate the number of markov-generated words that are not English words
-        
+
         if verbose:
             print(f"Unique: {unique_count} Regen: {regenerated_count}")
 
@@ -118,7 +116,8 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
 
         if verbose==True:
             print(f"Generated {num_words} words, {len(words)} of which were not repeats.")
-            print(f"Of the unique words, {unique_count} are new and {regenerated_count} are from the text")
+            print(f"Of the unique words, {unique_count} are new and\
+                  {regenerated_count} are from the text")
             print(f"Of the new words, {english_count} are actual words")
 
         text_info.append({
