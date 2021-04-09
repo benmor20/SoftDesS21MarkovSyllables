@@ -55,7 +55,8 @@ def nonzero_tokens(book):
     if not is_list:
         books = [book]
     all_tokens = {}
-    for book in books:
+    for index, book in enumerate(books):
+        print(f"Starting TF/IDF of Text {index+1}/{len(books)}")
         response = tfidf.transform([texts[book]])
         tokens = {}
         for index in response.nonzero()[1]:

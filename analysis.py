@@ -45,16 +45,13 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
         If analyze_text is a list of strings, returns a list of dicts, where
             each dict is as described above for each input text
     """
-    print(type(analyze_text))
     texts = analyze_text
     is_list = type(analyze_text) is list
     if not is_list:
         texts = [analyze_text]
     text_info = []
     for index, text in enumerate(texts):
-        if verbose:
-            print(f"Text {index+1}")
-        print(type(text))
+        print(f"Starting Analysis of text {index+1}/{len(texts)}")
 
         sylls = markov.build_next_syllables(text)
         if verbose:
