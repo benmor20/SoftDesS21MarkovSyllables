@@ -1,7 +1,18 @@
+"""
+Plots graphs for the computational essay
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 
 def plot_word_type_frequency(titles, analyses, scale=False):
+    """
+    Plots a bar graph of the word types given in analyses
+
+    Args:
+        titles: A list of strings; the titles of the corpora
+        analyses: A dict; the output from running analyze on the corpora
+        scale: A boolean defining whether to scale the bars to percentage
+    """
     unique = []
     regen = []
     re_sum = []
@@ -13,9 +24,9 @@ def plot_word_type_frequency(titles, analyses, scale=False):
             reg = analysis["regenerated_count"]
             eng = analysis["english_count"]
             total = uni + reg + eng
-            unique.append(uni / total * 100);
-            regen.append(reg / total * 100);
-            english.append(eng / total * 100);
+            unique.append(uni / total * 100)
+            regen.append(reg / total * 100)
+            english.append(eng / total * 100)
         else:
             unique.append(analysis["unique_count"])
             regen.append(analysis["regenerated_count"])
@@ -23,11 +34,11 @@ def plot_word_type_frequency(titles, analyses, scale=False):
         re_sum.append(regen[-1] + english[-1])
         ure_sum.append(re_sum[-1] + unique[-1])
 
-    fig, ax = plt.subplots()
+    _, ax = plt.subplots()
     ax.bar(titles, english, label="Unseen English Words", color="mediumblue")
     ax.bar(titles, regen, label="Regenerated Words", bottom=english, color="green")
     ax.bar(titles, unique, label="Unique Words", bottom=re_sum, color="darkorange")
-    ax.set_ylabel("Words")
+    ax.set_ylabel("Percentage" if scale else "Words")
     for tick in ax.get_xticklabels():
         tick.set_rotation(-60)
         tick.set_horizontalalignment("left")
@@ -38,32 +49,49 @@ Text")
 
 
 def plot_unseen_vs_tokens(titles, analyses, num_tokens):
+    """
+    Creates a scatterplot of unseen english words vs number of unique tokens
+
+    Args:
+        titles: A list of strings; the titles of the corpora
+        analyses: A dict; the output from running analyze on the corpora
+        num_tokens: A list of ints; how many unqiue tokens each corpus has
+    """
     english = []
     for analysis in analyses:
         english.append(analysis["english_count"])
-    
-    fig, ax = plt.subplots()
-    ax.scatter(num_tokens, english);
+
+    _, ax = plt.subplots()
+    ax.scatter(num_tokens, english)
     x_offset = [1000, 750, -2000, -500, 100, -13000]
     y_offset = [0, 0, 50, 50, 50, -450]
     for index,book in enumerate(titles):
         plt.text(num_tokens[index] + x_offset[index], english[index]
                  + y_offset[index], book, rotation=30)
-    ax.set_xlabel("Unique Words in Source Text");
-    ax.set_ylabel("Unseen English Words Generated");
+    ax.set_xlabel("Unique Words in Source Text")
+    ax.set_ylabel("Unseen English Words Generated")
     ax.set_ylim([0,2000])
     plt.title("Unseen English Words Generated versus Unique Words in Text")
     plt.show()
 
 
 def plot_word_lengths(titles, analyses):
+    """
+    Creates a bar graph of average length of words in each corpus and average
+    length of words generated from each corpus
+
+    Args:
+        titles: A list of strings; the titles of the corpora
+        analyses: A dict; the output from running analyze on the corpora
+        num_tokens: A list of ints; how many unqiue tokens each corpus has
+    """
     word_len = []
     markov_len = []
     for analysis in analyses:
         word_len.append(analysis["average_word_length"])
         markov_len.append(analysis["average_unique_markov_word_length"])
-    
-    fig, ax = plt.subplots()
+
+    _, ax = plt.subplots()
     width = 0.3
     indexes = np.arange(len(analyses))
     ax.bar(titles, word_len, width, label="Average Length of Source Words")

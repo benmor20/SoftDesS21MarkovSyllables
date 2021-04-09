@@ -2,11 +2,10 @@
 markov-chain word generation from those syllables, and analyze those words."""
 
 #Some of this code will be redundant with code found in testing.py
-from urllib import request
-import markov_with_syllables as markov
-import syllablizer
 from collections import Counter
 from nltk.corpus import words as english_words
+import markov_with_syllables as markov
+import syllablizer
 
 def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_syllables=1):
     """
@@ -46,7 +45,7 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
             each dict is as described above for each input text
     """
     texts = analyze_text
-    is_list = type(analyze_text) is list
+    is_list = isinstance(analyze_text, list)
     if not is_list:
         texts = [analyze_text]
     text_info = []
@@ -111,7 +110,7 @@ def analyze_markov_syllables(analyze_text, verbose=False, max_words=10000, min_s
         temp = [len(word) for word in novel_words]
         average_unique_markov_word_length = float(sum(temp)/len(temp))
 
-        if verbose==True:
+        if verbose:
             print(f"Generated {num_words} words, {len(words)} of which were not repeats.")
             print(f"Of the unique words, {unique_count} are new and\
                   {regenerated_count} are from the text")

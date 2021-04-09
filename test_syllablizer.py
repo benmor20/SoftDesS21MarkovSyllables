@@ -1,46 +1,47 @@
 """
-Test that the syllable splitter works properly
+Test that the syllable splitter works properly.
 """
 
-import collections
-import pytest
 from syllablizer import (
     preprocess,
-    build_next_syllables,
-    generate_sentence,
-    generate_text,
     syllablize
 )
 
 WORD_CASES = [
-    ("passive",["pas","sive"])
-    ("influential",["in","flu","en","tial"])
-    ("provisions",["pro","vi","sions"])
-    ("partners",["part","ners"])
-    ("bluebell",["blue","bell"])
-    ("rationale",["ra","tion","ale"])
-    ("Coca-Cola",["co","ca","co","la"])
-    ("account",["ac","count"])
-    ("banana",["ba","na","na"])
-    ("flakes",["flakes"])
-    ("tiny",["ti","ny"])
-    ("draft",["draft"])
-    ("Africa",["af","ri","ca"])
-    ("concrete",["con","crete"])
-    ("described",["de","scribed"])
-    ("recognition",["rec","og","nit","ion"])
-    ("niche",["niche"])
-    ("condominiums",["con","do","min","i","ums"])
-    ("recorded",["rec","ord","ed"])
-    ("September",["sep","tem","ber"])
-    ("ceremony",["cer","e","mo","ny"])
-    ("student",["stu","dent"])
-    ("apple",["ap","ple"])    
+    #Test Words of varying syllables -
+    ("apple", ['ap', 'ple']),
+    ("passive", ['pas', 'sive']),
+    ("influential", ['in', 'f', 'luen', 'tial']),
+    ("provisions", ['p', 'ro', 'vi', 'sions']),
+    ("partners", ['par', 't', 'ners']),
+    ("bluebell", ['b', 'lue', 'bell']),
+    ("rationale", ['ra', 'tio', 'nale']),
+    ("account", ['ac', 'count']),
+    ("banana", ['ba', 'na', 'na']),
+    ("tiny", ['ti', 'ny']),
+    ("draft", ['d', 'raft']),
+    ("student", ['s', 'tu', 'dent']),
+    ("flakes", ['f', 'la', 'kes']),
+    ("concrete", ['con', 'c', 'rete']),
+    ("described", ['des', 'c', 'ri', 'bed']),
+    ("recognition", ['re', 'cog', 'ni', 'tion']),
+    ("niche", ['niche']),
+    ("condominiums", ['con', 'do', 'mi', 'niums']),
+    ("recorded", ['re', 'cor', 'ded']),
+    ("September", ['sep', 'tem', 'ber']),
+    ("ceremony", ['ce', 're', 'mo', 'ny']),
+    #Test some capitalized words
+    ("Africa", ['af', 'ri', 'ca']),
+    ("Olin", ['o', 'lin']),
+    #Test some hyphenated words
+    ("Check-in", ['chec', 'kin']),
+    ("Coca-Cola", ['co', 'ca', 'co', 'la']),
 ]
 
 
-@pytest.mark.parameterize("word", "syllables", WORD_CASES)
-
 def test_syllablizer():
-
-    assert(syllablize(word) == syllables)
+    """
+    Tests syllaiblizer function
+    """
+    for case in WORD_CASES:
+        assert syllablize(preprocess(case[0])) == case[1]

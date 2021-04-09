@@ -1,6 +1,9 @@
-import syllablizer
+"""
+Apply Markov chain generation to a text, but with syllables
+"""
+
 import random
-import wikipedia
+import syllablizer
 
 def build_word_list(source_text):
     """
@@ -17,13 +20,16 @@ def build_word_list(source_text):
             comply to the rules above. Each word is also preprocessed.
     """
     words = source_text.replace("\n", " ").split()
-    letters = "qwertyuiopasdfghjklzxcvbnm" # can't use isalpha because that includes accents, which syllablizer cannot deal with
+    # can't use isalpha because that includes accents, which syllablizer cannot deal with
+    letters = "qwertyuiopasdfghjklzxcvbnm"
     digits = "1234567890"
     word_list = []
     for word in words:
         alpha = True
         has_lower = False
-        for char in word[1:-1]: # check that all except first and last are letters - first for (, {, [, last for punc and closing
+        # check that all except first and last are letters - first for (, {, [,
+        # last for punc and closing
+        for char in word[1:-1]:
             if char.lower() not in letters:
                 alpha = False
                 break
@@ -68,7 +74,7 @@ def build_next_syllables(source_text):
 
     Args:
         source_text: a string, the corpus ot build the syllable mapping for.
-    
+
     Returns:
         A dict mapping strings (syllables) to lists of strings (all syllables
             that follow the key) as per the rules above.
@@ -102,7 +108,7 @@ def generate_word(next_sylls):
         next_sylls: a dictionary of strings to lists of strings, representing
             all syllables and the list of all syllables that follow it in a
             certain corpus.
-    
+
     Returns:
         A string representing a random word generated from running a Markov
             chain on next_sylls, as per the specification above.

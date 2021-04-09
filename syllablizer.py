@@ -1,10 +1,14 @@
+"""
+Module to split words into syllables
+"""
+
 def syllablize(word):
     """
     Breaks a word up into syllables.
 
     Args:
         word: a string representing a single word to break up
-    
+
     Returns:
         a list of strings, where each string is one syllable of the word.
     """
@@ -25,7 +29,8 @@ def syllablize(word):
             continue
         if index < length - 1 and word[index:index+2] in consonant_pairs:
             continue
-        if word[index+1:] == "e" or (index >= length - 2 and word[-1] not in vowels): # silent e, only consonants left (like ld in should or m in item)
+        # silent e, only consonants left (like ld in should or m in item)
+        if word[index+1:] == "e" or (index >= length - 2 and word[-1] not in vowels):
             return [word]
         if word[index + 1] in vowels:
             syllables = [word[:index]] + syllablize(word[index:])
@@ -45,7 +50,7 @@ def preprocess(word):
 
     Args:
         word: a string to preprocess. Assumed to be a single word.
-    
+
     Returns:
         A string representing the cleaned version of the word
     """

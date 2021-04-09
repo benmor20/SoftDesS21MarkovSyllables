@@ -1,8 +1,11 @@
+"""
+Calculates TF/IDF score for each corpus
+"""
+
 import nltk
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.stem.porter import PorterStemmer
 from get_text import get_texts
-from get_text import books
 
 def tokenize(text):
     """
@@ -39,7 +42,7 @@ def nonzero_tokens(book):
         book: a string giving the title of the corpus to find tokens for, as
             defined in get_texts.py. Alternatively, a list of strings, giving
             titles for a list of corpora to find tokens for.
-    
+
     Returns:
         A dictionary of strings to floats, mapping tokens in the specified
             corpus to their TF/IDF value. Alternatively, if book is a list of
@@ -50,18 +53,18 @@ def nonzero_tokens(book):
     Code adapted from:
     https://www.bogotobogo.com/python/NLTK/tf_idf_with_scikit-learn_NLTK.php
     """
-    books = book
-    is_list = type(book) is list
+    books_list = book
+    is_list = isinstance(book, list)
     if not is_list:
-        books = [book]
+        books_list = [book]
     all_tokens = {}
-    for index, book in enumerate(books):
-        print(f"Starting TF/IDF of Text {index+1}/{len(books)}")
-        response = tfidf.transform([texts[book]])
+    for index, text in enumerate(books_list):
+        print(f"Starting TF/IDF of Text {index+1}/{len(books_list)}")
+        response = tfidf.transform([texts[text]])
         tokens = {}
-        for index in response.nonzero()[1]:
-            tokens[feature_names[index]] = response[0, index]
-        all_tokens[book] = tokens
+        for token_index in response.nonzero()[1]:
+            tokens[feature_names[token_index]] = response[0, token_index]
+        all_tokens[text] = tokens
     return all_tokens if is_list else all_tokens[book]
 
 
@@ -83,7 +86,7 @@ def num_nonzero_tokens(book):
             them.
     """
     tokens = nonzero_tokens(book)
-    if type(book) is list:
+    if isinstance(book, list):
         num_tokens = []
         for title in book:
             num_tokens.append(len(tokens[title]))
